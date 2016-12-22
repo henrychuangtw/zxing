@@ -60,8 +60,9 @@ public final class Decoder {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
+      boolean[] imageI = image[i];
       for (int j = 0; j < dimension; j++) {
-        if (image[i][j]) {
+        if (imageI[j]) {
           bits.set(j, i);
         }
       }
@@ -187,9 +188,8 @@ public final class Decoder {
     for (int i = 0; i < numCodewords; i++) {
       codewordsInts[i] = codewordBytes[i] & 0xFF;
     }
-    int numECCodewords = codewordBytes.length - numDataCodewords;
     try {
-      rsDecoder.decode(codewordsInts, numECCodewords);
+      rsDecoder.decode(codewordsInts, codewordBytes.length - numDataCodewords);
     } catch (ReedSolomonException ignored) {
       throw ChecksumException.getChecksumInstance();
     }
